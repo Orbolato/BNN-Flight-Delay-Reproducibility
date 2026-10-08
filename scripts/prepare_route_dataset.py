@@ -3,16 +3,13 @@
 Usage:
     python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
 
-The script writes data/final_data_sbrf_sbgr.csv and a deterministic gzip archive,
-then prints SHA-256 checksums for both files.
+The script writes data/final_data_sbrf_sbgr.csv and verifies its SHA-256 checksum.
 """
 
 from __future__ import annotations
 
 import argparse
-import gzip
 import hashlib
-import shutil
 from pathlib import Path
 
 import pandas as pd
@@ -48,7 +45,6 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     csv_path = args.output_dir / "final_data_sbrf_sbgr.csv"
-    gz_path = args.output_dir / "final_data_sbrf_sbgr.csv.gz"
 
     route.to_csv(csv_path, index=False)
     csv_hash = sha256(csv_path)
@@ -58,14 +54,8 @@ def main() -> None:
             f"Expected {EXPECTED_CSV_SHA256}, got {csv_hash}."
         )
 
-    # Deterministic gzip: no stored filename and mtime=0.
-    with csv_path.open("rb") as f_in, gz_path.open("wb") as raw_out:
-        with gzip.GzipFile(filename="", mode="wb", fileobj=raw_out, compresslevel=9, mtime=0) as f_out:
-            shutil.copyfileobj(f_in, f_out)
-
     print(f"Rows/columns: {route.shape}")
-    print(f"CSV:    {csv_path}  sha256={sha256(csv_path)}")
-    print(f"CSV.GZ: {gz_path}  sha256={sha256(gz_path)}")
+    print(f"CSV: {csv_path}  sha256={csv_hash}")
 
 
 if __name__ == "__main__":
