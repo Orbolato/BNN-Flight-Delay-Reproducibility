@@ -2,7 +2,7 @@
 
 ## Exact reproduction dataset
 
-The paper-faithful numerical experiment uses the route-specific processed dataset included in this repository at `data/final_data_sbrf_sbgr.csv.gz`.
+The paper-faithful numerical experiment uses the route-specific processed dataset included in this repository at `data/final_data_sbrf_sbgr.csv`.
 
 - Rows: **14,956**
 - Columns: **28**
@@ -15,28 +15,16 @@ The route dataset is an unchanged row/column slice of the archived `final_data_s
 
 The full archived processed table contains 254,183 rows. It is not required by the model after the SBRF-SBGR route selection. The repository also includes a small schema sample and `scripts/prepare_route_dataset.py`; users with the archived parent table can independently regenerate and integrity-check the exact route file.
 
-### Integrity checks
+### Integrity check
 
-The canonical integrity check is the SHA-256 of the **decompressed CSV**, because gzip archives may differ at the byte level solely because of header metadata such as stored filename and timestamp.
-
-For the exact route dataset:
+For the exact route CSV included in the repository:
 
 ```text
-SHA-256 (decompressed CSV):
+SHA-256:
 02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
-
-SHA-256 (repository file data/final_data_sbrf_sbgr.csv.gz):
-17a3d479a517f8a57d3c7122824daefa488b17753da9c3538c10c9a92f1b78f4
 ```
 
-The preparation script writes a deterministic gzip archive with an empty stored filename and `mtime=0`. That deterministic archive has:
-
-```text
-SHA-256 (deterministic regenerated CSV.GZ):
-bc0bc3e36d71353e9997b409f396a2f5cc6224f63160a5a20e05d32759d5bee0
-```
-
-Both gzip archives decompress to the same canonical CSV with SHA-256 `02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb`.
+This checksum is the canonical integrity check for the paper-faithful processed dataset.
 
 ## Source data
 
@@ -102,8 +90,8 @@ With the archived `final_data_sbgr.csv` available locally, run:
 python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
 ```
 
-The script checks the expected 14,956 x 28 shape, verifies the exact uncompressed CSV checksum, and creates a deterministic gzip archive.
+The script checks the expected 14,956 x 28 shape, writes `data/final_data_sbrf_sbgr.csv`, and verifies the exact SHA-256 checksum.
 
 ## Data terms
 
-The repository's MIT License applies to code and the notebook. Use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
+The repository's MIT License applies to code and the notebooks. Use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
