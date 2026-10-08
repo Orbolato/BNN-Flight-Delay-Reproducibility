@@ -2,7 +2,7 @@
 
 ## Exact reproduction dataset
 
-The paper-faithful numerical experiment uses the route-specific processed dataset `data/final_data_sbrf_sbgr.csv.gz`.
+The paper-faithful numerical experiment uses the route-specific processed dataset included in this repository at `data/final_data_sbrf_sbgr.csv.gz`.
 
 - Rows: **14,956**
 - Columns: **28**
@@ -13,18 +13,30 @@ The paper-faithful numerical experiment uses the route-specific processed datase
 
 The route dataset is an unchanged row/column slice of the archived `final_data_sbgr.csv` used by the executable experiment. The route code column is intentionally retained so that the original source-code route filter remains valid.
 
-The full archived processed table contains 254,183 rows. It is not required by the model after the SBRF-SBGR route selection. The repository includes a small schema sample and `scripts/prepare_route_dataset.py`; users with the archived parent table can regenerate and integrity-check the exact route file.
+The full archived processed table contains 254,183 rows. It is not required by the model after the SBRF-SBGR route selection. The repository also includes a small schema sample and `scripts/prepare_route_dataset.py`; users with the archived parent table can independently regenerate and integrity-check the exact route file.
 
 ### Integrity checks
 
-For the verified exact route dataset:
+The canonical integrity check is the SHA-256 of the **decompressed CSV**, because gzip archives may differ at the byte level solely because of header metadata such as stored filename and timestamp.
+
+For the exact route dataset:
 
 ```text
-SHA-256 (CSV):    02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
-SHA-256 (CSV.GZ): bc0bc3e36d71353e9997b409f396a2f5cc6224f63160a5a20e05d32759d5bee0
+SHA-256 (decompressed CSV):
+02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
+
+SHA-256 (repository file data/final_data_sbrf_sbgr.csv.gz):
+17a3d479a517f8a57d3c7122824daefa488b17753da9c3538c10c9a92f1b78f4
 ```
 
-The gzip checksum corresponds to the deterministic archive generated with an empty stored filename and `mtime=0`; decompressing it yields the CSV checksum above.
+The preparation script writes a deterministic gzip archive with an empty stored filename and `mtime=0`. That deterministic archive has:
+
+```text
+SHA-256 (deterministic regenerated CSV.GZ):
+bc0bc3e36d71353e9997b409f396a2f5cc6224f63160a5a20e05d32759d5bee0
+```
+
+Both gzip archives decompress to the same canonical CSV with SHA-256 `02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb`.
 
 ## Source data
 
