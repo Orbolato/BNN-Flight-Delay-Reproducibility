@@ -5,17 +5,15 @@ Reproducibility package for:
 **Lucas Orbolato Carvalho, Mayara Condé Rocha Murça, Marcelo Xavier Guterres, and Igor Galhano Gomes, “Predicting Arrival Delays and Flight Time Deviations Under Uncertainty Using Bayesian Neural Networks,” IEEE Access, 2026.**  
 DOI: https://doi.org/10.1109/ACCESS.2026.3709713
 
-This repository packages the executable experiment used for the paper together with a compact, route-specific processed dataset and notebooks that reproduce the reported Bayesian neural network (BNN) results.
+This repository packages the paper-faithful executable experiment together with a compact route-specific processed dataset and a public reproduction notebook.
 
 ## Repository contents
 
-- `notebooks/paper_reproduction.ipynb` — cleaned notebook reproducing the published experiment.
-- `notebooks/verified_reference_run.ipynb` — executed reference notebook documenting a verified reproduction run.
-- `reproduce_exact_paper.py` — standalone reproduction script.
-- `src/delay_pred_enhanced.py` — archived experiment implementation, with only the dataset path made portable.
+- `notebooks/paper_reproduction.ipynb` — public notebook for reproducing the published experiment.
+- `reproduce_exact_paper.py` — standalone implementation preserving the numerical details needed for stochastic reproduction.
 - `data/final_data_sbrf_sbgr.csv.gz` — exact 14,956-row SBRF-SBGR processed subset used after the route filter in the published experiment.
-- `data/sample_sbrf_sbgr.csv` — 100-row sample for inspection/smoke testing only.
-- `DATA.md` — data provenance, schema, and the wind-speed reproducibility note.
+- `data/sample_sbrf_sbgr.csv` — 20-row sample for schema inspection only.
+- `DATA.md` — data provenance, schema, checksums, and the wind-speed reproducibility note.
 - `CITATION.cff` — citation metadata for GitHub's “Cite this repository” interface.
 
 ## Verified reference result
@@ -40,66 +38,53 @@ The executable benchmark values encoded for the four final BNN configurations ar
 
 ## Important reproducibility note: sustained wind speed
 
-The paper lists **Wind Speed** among the conceptual input features. However, the archived processed modeling table used by the final executable experiment does not contain a sustained-wind-speed column. After the SBRF-SBGR route filter and the source-code column drops, the executable experiment uses **23 input features**, including wind direction (`drct`) and gust speed (`gust_speed`), but not sustained wind speed.
+The paper lists **Wind Speed** among the conceptual input features. However, the archived processed modeling table used by the final executable experiment does not contain a sustained-wind-speed column. After the SBRF-SBGR route filter and source-code column drops, the executable experiment uses **23 input features**, including wind direction (`drct`) and gust speed (`gust_speed`), but not sustained wind speed.
 
-The notebooks in this repository follow the **executable published experiment**. This distinction is documented explicitly because it can otherwise cause a well-implemented independent reproduction to diverge from the reported numerical results.
+The public notebook and script follow the **executable published experiment**. This distinction is documented explicitly because it can otherwise cause an independent reproduction to diverge from the reported numerical results.
 
 ## Quick start
-
-Create a Python environment and install the dependencies:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-Then run:
-
-```bash
 python reproduce_exact_paper.py
 ```
 
 The standalone script starts with the Arrival Delay coverage-selected configuration. The other three paper configurations are listed in the `RUNS` block and can be enabled there.
 
-You can also open:
-
-```text
-notebooks/paper_reproduction.ipynb
-```
+You can also open `notebooks/paper_reproduction.ipynb`.
 
 The route-specific dataset intentionally retains `sg_icao_origem`, so the original route-filter statement remains valid and idempotent.
 
 ## Data provenance
 
-The processed features were derived from the public data sources described in the paper: Brazilian **ANAC Active Regular Flight (VRA) Reports** and **METAR** observations obtained through the Iowa Environmental Mesonet. The study period is 2022-2024, with São Paulo/Guarulhos (SBGR) as destination. See [`DATA.md`](DATA.md) for additional details.
+The processed features were derived from the public data sources described in the paper: Brazilian **ANAC Active Regular Flight (VRA) Reports** and **METAR** observations obtained through the Iowa Environmental Mesonet. The study period is 2022-2024, with São Paulo/Guarulhos (SBGR) as destination. See [`DATA.md`](DATA.md) for details.
 
-The repository distributes the route-specific processed modeling subset rather than the full 254,183-row intermediate table because model training is performed after filtering to SBRF-SBGR. The subset preserves the row order and columns of that exact slice.
+The public package uses the route-specific processed modeling subset rather than the full 254,183-row intermediate table because model training is performed after filtering to SBRF-SBGR. The subset preserves the exact row order and columns of that slice.
 
 ## Reproducibility scope
 
-This repository is intended to reproduce the numerical modeling experiment, including implementation details that materially affect stochastic reproduction, such as:
+The implementation deliberately preserves details that materially affect the stochastic result, including:
 
 - pre-shuffling before the train/validation/test split;
 - seed 42;
 - MinMax scaling behavior;
 - two-stage BNN training and KL weighting;
-- the original BNN/ANN model-construction order, which advances PyTorch's RNG state;
-- the Monte Carlo evaluation sequence used by the source implementation.
-
-The archived `src/delay_pred_enhanced.py` contains the broader analysis/plotting implementation. `reproduce_exact_paper.py` and the notebooks isolate the core logic required to reproduce the reported BNN results.
+- the original **BNN-then-ANN model-construction order**, which advances PyTorch's RNG state;
+- the Monte Carlo evaluation sequence used by the archived executable experiment.
 
 ## Citation
 
-If you use this repository, please cite the associated article:
+If you use this repository, please cite:
 
 > Carvalho, L. O., Murça, M. C. R., Guterres, M. X., & Gomes, I. G. (2026). Predicting Arrival Delays and Flight Time Deviations Under Uncertainty Using Bayesian Neural Networks. *IEEE Access*. https://doi.org/10.1109/ACCESS.2026.3709713
 
-GitHub also exposes the citation through `CITATION.cff`.
+GitHub also exposes the preferred citation through `CITATION.cff`.
 
 ## License and data terms
 
-The repository **code and notebooks** are released under the MIT License. The processed dataset is provided for research reproducibility; the MIT License does not override the terms, attribution requirements, or rights associated with the underlying ANAC VRA and Iowa Environmental Mesonet source data. See `DATA.md`.
+The repository **code and notebook** are released under the MIT License. The processed dataset is provided for research reproducibility; the MIT License does not override the terms, attribution requirements, or rights associated with the underlying ANAC VRA and Iowa Environmental Mesonet source data. See `DATA.md`.
 
 ## Contact
 
