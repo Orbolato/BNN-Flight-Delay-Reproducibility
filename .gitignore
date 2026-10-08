@@ -8,6 +8,5 @@ bnn_*/
 comparison_results/
 feature_importance/
 
-# Local data products. The exact compressed route subset is versioned explicitly.
-data/final_data_sbrf_sbgr.csv
+# Archived parent dataset is local-only; the exact route subset is versioned.
 final_data_sbgr.csv
