@@ -9,14 +9,14 @@ This repository packages the paper-faithful executable experiment, the exact rou
 
 ## Repository contents
 
-- `data/final_data_sbrf_sbgr.csv.gz` — exact 14,956-row SBRF-SBGR processed dataset used for the paper-faithful numerical experiment.
+- `data/final_data_sbrf_sbgr.csv` — exact 14,956-row SBRF-SBGR processed dataset used for the paper-faithful numerical experiment.
 - `data/sample_sbrf_sbgr.csv` — 20-row sample for quick schema inspection only.
 - `notebooks/paper_reproduction.ipynb` — public notebook for reproducing the published experiment.
 - `notebooks/verified_reference_run.ipynb` — preserved verified reference run.
 - `reproduce_exact_paper.py` — standalone implementation preserving the numerical details needed for stochastic reproduction.
-- `scripts/prepare_route_dataset.py` — extracts the exact route subset from the archived parent `final_data_sbgr.csv` table and verifies its canonical SHA-256 checksum.
+- `scripts/prepare_route_dataset.py` — extracts the exact route subset from the archived parent `final_data_sbgr.csv` table and verifies its SHA-256 checksum.
 - `src/README.md` — notes on the scope of the public source package and the larger development workflow.
-- `DATA.md` — data provenance, schema, exact dataset checksums, and the wind-speed reproducibility note.
+- `DATA.md` — data provenance, schema, exact dataset checksum, and the wind-speed reproducibility note.
 - `CITATION.cff` — citation metadata for GitHub's “Cite this repository” interface.
 
 ## Verified reference result
@@ -58,7 +58,7 @@ pip install -r requirements.txt
 The exact processed dataset is already included at:
 
 ```text
-data/final_data_sbrf_sbgr.csv.gz
+data/final_data_sbrf_sbgr.csv
 ```
 
 Run:
@@ -75,16 +75,10 @@ The route-specific dataset intentionally retains `sg_icao_origem`, so the origin
 
 ## Dataset integrity and regeneration
 
-The exact uncompressed route CSV contains **14,956 rows and 28 columns**. Its canonical SHA-256 is:
+The exact route CSV contains **14,956 rows and 28 columns**. Its SHA-256 is:
 
 ```text
 02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
-```
-
-The compressed archive currently included in the repository has SHA-256:
-
-```text
-17a3d479a517f8a57d3c7122824daefa488b17753da9c3538c10c9a92f1b78f4
 ```
 
 If you have the archived parent `final_data_sbgr.csv`, regenerate and verify the route dataset with:
@@ -93,7 +87,7 @@ If you have the archived parent `final_data_sbgr.csv`, regenerate and verify the
 python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
 ```
 
-The script creates a deterministic gzip archive. Because gzip headers can encode metadata, its compressed-file checksum differs from the included archive even though both decompress to the same canonical CSV. See `DATA.md` for details.
+The script writes `data/final_data_sbrf_sbgr.csv`, checks the expected 14,956 x 28 shape, and verifies the exact SHA-256 above. See `DATA.md` for details.
 
 ## Data provenance
 
