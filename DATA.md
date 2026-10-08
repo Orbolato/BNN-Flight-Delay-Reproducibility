@@ -1,8 +1,8 @@
 # Data documentation
 
-## Public reproduction dataset
+## Exact reproduction dataset
 
-`data/final_data_sbrf_sbgr.csv.gz` is the route-specific processed dataset used by this reproducibility package.
+The paper-faithful numerical experiment uses the route-specific processed dataset `data/final_data_sbrf_sbgr.csv.gz`.
 
 - Rows: **14,956**
 - Columns: **28**
@@ -11,20 +11,20 @@
 - Study period represented by the parent processed dataset: **2022-2024**
 - Extraction rule from the archived processed modeling table: `sg_icao_origem == 2`
 
-The file is an unchanged row/column slice of the archived `final_data_sbgr.csv` used by the executable experiment. The route code column is intentionally retained so that the original source-code route filter remains valid.
+The route dataset is an unchanged row/column slice of the archived `final_data_sbgr.csv` used by the executable experiment. The route code column is intentionally retained so that the original source-code route filter remains valid.
 
-The full archived processed table contains 254,183 rows. It is not required to reproduce the route-specific models and is therefore not distributed here.
+The full archived processed table contains 254,183 rows. It is not required by the model after the SBRF-SBGR route selection. The repository includes a small schema sample and `scripts/prepare_route_dataset.py`; users with the archived parent table can regenerate and integrity-check the exact route file.
 
 ### Integrity checks
 
-For the prepared reproduction files:
+For the verified exact route dataset:
 
 ```text
 SHA-256 (CSV):    02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
 SHA-256 (CSV.GZ): bc0bc3e36d71353e9997b409f396a2f5cc6224f63160a5a20e05d32759d5bee0
 ```
 
-The gzip archive is generated deterministically with an empty stored filename and `mtime=0`; decompressing it yields the CSV checksum above.
+The gzip checksum corresponds to the deterministic archive generated with an empty stored filename and `mtime=0`; decompressing it yields the CSV checksum above.
 
 ## Source data
 
@@ -33,7 +33,7 @@ As described in the paper, the processed table combines:
 1. **Active Regular Flight (VRA) Reports** from Brazil's National Civil Aviation Agency (ANAC), providing operational flight information.
 2. **METAR observations** for SBGR obtained through the Iowa Environmental Mesonet, providing meteorological variables.
 
-Flights and meteorological observations are merged using the feature-engineering procedure described in the article. The public file contains processed/encoded modeling features rather than raw flight records.
+Flights and meteorological observations are merged using the feature-engineering procedure described in the article. The processed modeling table contains encoded/engineered features rather than the raw source records.
 
 ## Columns
 
@@ -76,12 +76,22 @@ The published methodology table lists sustained wind speed as a conceptual featu
 
 Accordingly, after the source-code route filter and removal of non-input/alternate-output columns, the numerical experiment uses **23 input features**. The public reproduction intentionally follows that executable experiment.
 
-A later reconstructed dataset containing an `sknt` field was created during a post-publication diagnostic exercise. It is **not** part of this repository because it is not the dataset underlying the published numerical results.
+A later reconstructed dataset containing an `sknt` field was created during a post-publication diagnostic exercise. It is **not** part of the paper-faithful dataset because it is not the dataset underlying the published numerical results.
 
 ## Sample file
 
 `data/sample_sbrf_sbgr.csv` contains the first 20 rows solely for schema inspection. It cannot reproduce the reported paper metrics.
 
+## Regenerating the exact route slice
+
+With the archived `final_data_sbgr.csv` available locally, run:
+
+```bash
+python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
+```
+
+The script checks the expected 14,956 x 28 shape, verifies the exact uncompressed CSV checksum, and creates a deterministic gzip archive.
+
 ## Data terms
 
-The repository's MIT License applies to code and the notebook. The processed dataset is supplied for reproducibility of the published study; use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
+The repository's MIT License applies to code and the notebook. Use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
