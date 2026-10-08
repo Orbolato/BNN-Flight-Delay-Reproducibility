@@ -5,7 +5,7 @@ Reproducibility package for:
 **Lucas Orbolato Carvalho, Mayara Condé Rocha Murça, Marcelo Xavier Guterres, and Igor Galhano Gomes, “Predicting Arrival Delays and Flight Time Deviations Under Uncertainty Using Bayesian Neural Networks,” IEEE Access, 2026.**  
 DOI: https://doi.org/10.1109/ACCESS.2026.3709713
 
-This repository packages the paper-faithful executable experiment together with a compact route-specific processed dataset and a public reproduction notebook.
+This repository packages the paper-faithful executable experiment together with the exact route-specific processed dataset and a public reproduction notebook.
 
 ## Repository contents
 
@@ -13,6 +13,8 @@ This repository packages the paper-faithful executable experiment together with 
 - `reproduce_exact_paper.py` — standalone implementation preserving the numerical details needed for stochastic reproduction.
 - `data/final_data_sbrf_sbgr.csv.gz` — exact 14,956-row SBRF-SBGR processed subset used after the route filter in the published experiment.
 - `data/sample_sbrf_sbgr.csv` — 20-row sample for schema inspection only.
+- `scripts/prepare_route_dataset.py` — regenerates the exact route subset from the archived parent `final_data_sbgr.csv` table and verifies its SHA-256 checksum.
+- `src/README.md` — notes on the scope of the public source package and the larger development workflow.
 - `DATA.md` — data provenance, schema, checksums, and the wind-speed reproducibility note.
 - `CITATION.cff` — citation metadata for GitHub's “Cite this repository” interface.
 
@@ -56,6 +58,22 @@ The standalone script starts with the Arrival Delay coverage-selected configurat
 You can also open `notebooks/paper_reproduction.ipynb`.
 
 The route-specific dataset intentionally retains `sg_icao_origem`, so the original route-filter statement remains valid and idempotent.
+
+## Dataset integrity and regeneration
+
+The exact route file is versioned in compressed form so the repository is directly runnable. Its uncompressed CSV SHA-256 is:
+
+```text
+02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
+```
+
+If you have the archived parent `final_data_sbgr.csv`, the exact route slice can be regenerated and verified with:
+
+```bash
+python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
+```
+
+See `DATA.md` for both CSV and deterministic gzip checksums.
 
 ## Data provenance
 
