@@ -19,9 +19,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat data/.payload/part_*.b64 > /tmp/final_data_sbrf_sbgr.csv.gz.b64
-          base64 --decode /tmp/final_data_sbrf_sbgr.csv.gz.b64 > data/final_data_sbrf_sbgr.csv.gz
-          echo '17a3d479a517f8a57d3c7122824daefa488b17753da9c3538c10c9a92f1b78f4  data/final_data_sbrf_sbgr.csv.gz' | sha256sum -c -
+          cat data/.payload/part_*.b64 > /tmp/final_data_sbrf_sbgr.csv.xz.b64
+          base64 --decode /tmp/final_data_sbrf_sbgr.csv.xz.b64 > /tmp/final_data_sbrf_sbgr.csv.xz
+          xz -dc /tmp/final_data_sbrf_sbgr.csv.xz > /tmp/final_data_sbrf_sbgr.csv
+          echo '02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb  /tmp/final_data_sbrf_sbgr.csv' | sha256sum -c -
+          gzip -n -9 -c /tmp/final_data_sbrf_sbgr.csv > data/final_data_sbrf_sbgr.csv.gz
+          echo '1ecdce1345a0ccfd2b907011e94a29fc514e8a037c80d5836a6f969699cc73be  data/final_data_sbrf_sbgr.csv.gz' | sha256sum -c -
           gzip -t data/final_data_sbrf_sbgr.csv.gz
       - name: Commit exact dataset
         shell: bash
