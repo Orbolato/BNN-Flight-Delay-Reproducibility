@@ -5,17 +5,17 @@ Reproducibility package for:
 **Lucas Orbolato Carvalho, Mayara Condé Rocha Murça, Marcelo Xavier Guterres, and Igor Galhano Gomes, “Predicting Arrival Delays and Flight Time Deviations Under Uncertainty Using Bayesian Neural Networks,” IEEE Access, 2026.**  
 DOI: https://doi.org/10.1109/ACCESS.2026.3709713
 
-This repository packages the paper-faithful executable experiment together with the exact route-specific processed dataset and a public reproduction notebook.
+This repository packages the paper-faithful executable experiment, a public reproduction notebook, data documentation, and a script that verifies the exact route-specific processed dataset.
 
 ## Repository contents
 
-- `notebooks/paper_reproduction.ipynb` — public notebook for reproducing the published experiment.
+- `notebooks/paper_reproduction.ipynb` — public notebook for reproducing the published experiment once the exact route dataset is present.
+- `notebooks/verified_reference_run.ipynb` — preserved verified reference run.
 - `reproduce_exact_paper.py` — standalone implementation preserving the numerical details needed for stochastic reproduction.
-- `data/final_data_sbrf_sbgr.csv.gz` — exact 14,956-row SBRF-SBGR processed subset used after the route filter in the published experiment.
 - `data/sample_sbrf_sbgr.csv` — 20-row sample for schema inspection only.
-- `scripts/prepare_route_dataset.py` — regenerates the exact route subset from the archived parent `final_data_sbgr.csv` table and verifies its SHA-256 checksum.
+- `scripts/prepare_route_dataset.py` — extracts the exact 14,956-row SBRF-SBGR subset from the archived parent `final_data_sbgr.csv` table and verifies its SHA-256 checksum.
 - `src/README.md` — notes on the scope of the public source package and the larger development workflow.
-- `DATA.md` — data provenance, schema, checksums, and the wind-speed reproducibility note.
+- `DATA.md` — data provenance, schema, exact dataset checksums, and the wind-speed reproducibility note.
 - `CITATION.cff` — citation metadata for GitHub's “Cite this repository” interface.
 
 ## Verified reference result
@@ -46,10 +46,23 @@ The public notebook and script follow the **executable published experiment**. T
 
 ## Quick start
 
+Create an environment and install the dependencies:
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+Place the exact route-specific processed file at:
+
+```text
+data/final_data_sbrf_sbgr.csv.gz
+```
+
+Then run:
+
+```bash
 python reproduce_exact_paper.py
 ```
 
@@ -61,25 +74,25 @@ The route-specific dataset intentionally retains `sg_icao_origem`, so the origin
 
 ## Dataset integrity and regeneration
 
-The exact route file is versioned in compressed form so the repository is directly runnable. Its uncompressed CSV SHA-256 is:
+The exact uncompressed route CSV contains **14,956 rows and 28 columns**. Its SHA-256 is:
 
 ```text
 02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
 ```
 
-If you have the archived parent `final_data_sbgr.csv`, the exact route slice can be regenerated and verified with:
+If you have the archived parent `final_data_sbgr.csv`, regenerate and verify the route dataset with:
 
 ```bash
 python scripts/prepare_route_dataset.py /path/to/final_data_sbgr.csv
 ```
 
-See `DATA.md` for both CSV and deterministic gzip checksums.
+The script creates both `data/final_data_sbrf_sbgr.csv` and a deterministic `data/final_data_sbrf_sbgr.csv.gz`. See `DATA.md` for both checksums.
 
 ## Data provenance
 
 The processed features were derived from the public data sources described in the paper: Brazilian **ANAC Active Regular Flight (VRA) Reports** and **METAR** observations obtained through the Iowa Environmental Mesonet. The study period is 2022-2024, with São Paulo/Guarulhos (SBGR) as destination. See [`DATA.md`](DATA.md) for details.
 
-The public package uses the route-specific processed modeling subset rather than the full 254,183-row intermediate table because model training is performed after filtering to SBRF-SBGR. The subset preserves the exact row order and columns of that slice.
+Model training is performed after filtering the 254,183-row archived processed SBGR table to SBRF-SBGR. The exact route slice preserves the original row order and columns.
 
 ## Reproducibility scope
 
@@ -102,7 +115,7 @@ GitHub also exposes the preferred citation through `CITATION.cff`.
 
 ## License and data terms
 
-The repository **code and notebook** are released under the MIT License. The processed dataset is provided for research reproducibility; the MIT License does not override the terms, attribution requirements, or rights associated with the underlying ANAC VRA and Iowa Environmental Mesonet source data. See `DATA.md`.
+The repository **code and notebook** are released under the MIT License. Processed data used for reproduction derive from the source datasets described above; the MIT License does not override the terms, attribution requirements, or rights associated with the underlying ANAC VRA and Iowa Environmental Mesonet source data. See `DATA.md`.
 
 ## Contact
 
