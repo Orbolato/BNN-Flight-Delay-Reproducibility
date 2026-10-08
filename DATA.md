@@ -21,8 +21,10 @@ For the prepared reproduction files:
 
 ```text
 SHA-256 (CSV):    02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
-SHA-256 (CSV.GZ): 17a3d479a517f8a57d3c7122824daefa488b17753da9c3538c10c9a92f1b78f4
+SHA-256 (CSV.GZ): bc0bc3e36d71353e9997b409f396a2f5cc6224f63160a5a20e05d32759d5bee0
 ```
+
+The gzip archive is generated deterministically with an empty stored filename and `mtime=0`; decompressing it yields the CSV checksum above.
 
 ## Source data
 
