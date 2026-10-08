@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this reproducibility package, please cite the associated IEEE Access article."
+title: "BNN Flight Delay Reproducibility"
+type: software
+authors:
+  - family-names: Carvalho
+    given-names: Lucas Orbolato
+url: "https://github.com/Orbolato/BNN-Flight-Delay-Reproducibility"
+repository-code: "https://github.com/Orbolato/BNN-Flight-Delay-Reproducibility"
+license: MIT
+date-released: 2026-10-08
+preferred-citation:
+  type: article
+  title: "Predicting Arrival Delays and Flight Time Deviations Under Uncertainty Using Bayesian Neural Networks"
+  authors:
+    - family-names: Carvalho
+      given-names: Lucas Orbolato
+    - family-names: Murça
+      given-names: Mayara Condé Rocha
+    - family-names: Guterres
+      given-names: Marcelo Xavier
+    - family-names: Gomes
+      given-names: Igor Galhano
+  journal: "IEEE Access"
+  year: 2026
+  doi: "10.1109/ACCESS.2026.3709713"
