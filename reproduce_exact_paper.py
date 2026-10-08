@@ -19,8 +19,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 SEED = 42
 CANDIDATES = [
-    Path("data/final_data_sbrf_sbgr.csv.gz"),
-    Path("../data/final_data_sbrf_sbgr.csv.gz"),
     Path("data/final_data_sbrf_sbgr.csv"),
     Path("../data/final_data_sbrf_sbgr.csv"),
 ]
