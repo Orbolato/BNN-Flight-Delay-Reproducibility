@@ -15,6 +15,15 @@ The file is an unchanged row/column slice of the archived `final_data_sbgr.csv` 
 
 The full archived processed table contains 254,183 rows. It is not required to reproduce the route-specific models and is therefore not distributed here.
 
+### Integrity checks
+
+For the prepared reproduction files:
+
+```text
+SHA-256 (CSV):    02990049e1307b352b369c0074719ce89d21fbc6aa6156bcd0dd32059819a0eb
+SHA-256 (CSV.GZ): d8a4c510197c58b36f2f08b1a2b61e47b44eff59641c7ccf098d9c216f537545
+```
+
 ## Source data
 
 As described in the paper, the processed table combines:
@@ -22,11 +31,9 @@ As described in the paper, the processed table combines:
 1. **Active Regular Flight (VRA) Reports** from Brazil's National Civil Aviation Agency (ANAC), providing operational flight information.
 2. **METAR observations** for SBGR obtained through the Iowa Environmental Mesonet, providing meteorological variables.
 
-Flights and meteorological observations are merged using the feature-engineering procedure described in the article. The public file in this repository contains processed/encoded modeling features rather than raw flight records.
+Flights and meteorological observations are merged using the feature-engineering procedure described in the article. The public file contains processed/encoded modeling features rather than raw flight records.
 
 ## Columns
-
-The distributed table contains:
 
 ```text
 drct
@@ -59,20 +66,20 @@ flight_time_deviation
 arrival_delay
 ```
 
-Categorical operational fields in this processed table are label encoded. Cyclical temporal variables are already represented as sine/cosine pairs.
+Categorical operational fields are label encoded. Cyclical temporal variables are already represented as sine/cosine pairs.
 
 ## Wind-speed clarification
 
 The published methodology table lists sustained wind speed as a conceptual feature. The archived processed table used by the executable final experiment contains **no sustained-wind-speed field**. It contains wind direction (`drct`) and gust speed (`gust_speed`).
 
-Accordingly, after the source-code route filter and removal of non-input/alternate-output columns, the numerical experiment uses **23 input features**. The reproduction notebooks intentionally follow that executable experiment.
+Accordingly, after the source-code route filter and removal of non-input/alternate-output columns, the numerical experiment uses **23 input features**. The public reproduction intentionally follows that executable experiment.
 
 A later reconstructed dataset containing an `sknt` field was created during a post-publication diagnostic exercise. It is **not** part of this repository because it is not the dataset underlying the published numerical results.
 
 ## Sample file
 
-`data/sample_sbrf_sbgr.csv` contains the first 100 rows solely for schema inspection and smoke testing. It cannot reproduce the reported paper metrics.
+`data/sample_sbrf_sbgr.csv` contains the first 20 rows solely for schema inspection. It cannot reproduce the reported paper metrics.
 
 ## Data terms
 
-The repository's MIT License applies to code and notebooks. The processed dataset is supplied for reproducibility of the published study; use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
+The repository's MIT License applies to code and the notebook. The processed dataset is supplied for reproducibility of the published study; use of the underlying source data remains subject to the applicable ANAC and Iowa Environmental Mesonet terms and attribution requirements.
